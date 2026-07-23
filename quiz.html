@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajo Práctico: Selección de Software - TIC</title>
+    <style>
+        :root {
+            --primary-color: #1b365d;
+            --secondary-color: #4a777a;
+            --border-color: #333;
+            --bg-light: #f9f9f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: #222;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f6f8;
+        }
+
+        .paper-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .header-info {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        .student-data {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-field {
+            border: none;
+            border-bottom: 1px dotted #666;
+            outline: none;
+            font-family: inherit;
+            font-size: 1rem;
+            width: 60%;
+            background: transparent;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eaeaea;
+        }
+
+        .scores-table th, .scores-table td {
+            text-align: center;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 1.05rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            background: var(--bg-light);
+            padding: 12px;
+            border-left: 4px solid var(--secondary-color);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .question p {
+            margin: 0 0 8px 0;
+            font-weight: 600;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 5px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .checkbox-cell {
+            text-align: center;
+            width: 50px;
+        }
+
+        .case-box {
+            background-color: #eef4f8;
+            border: 1px solid #b8d4e3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        textarea.essay-space {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px dashed #aaa;
+            background: #fff;
+            min-height: 70px;
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .action-container {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
+        }
+
+        .btn-submit {
+            background-color: #1b365d;
+            color: #ffffff;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .btn-submit:hover {
+            background-color: #2b5288;
+        }
+
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            .paper-container {
+                box-shadow: none;
+                padding: 0;
+            }
+            h2 {
+                background-color: #333 !important;
+                color: #fff !important;
+                -webkit-print-color-adjust: exact;
+            }
+            .action-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="paper-container">
+
+    <header>
+        <div class="header-title">
+            Escuela Técnica N° 4-120 «Gral. José de San Martín»<br>
+            TIC — 3° Año
+        </div>
+        <div style="text-align: center; font-weight: bold; font-size: 1.1rem; color: #444;">
+            Actividad de Práctica: Selección de Software
+        </div>
+        
+        <div class="header-info">
+            <div class="student-data">
+                <div><strong>Prof:</strong> Humberto Montaldi</div>
+                <div><strong>Apellido y Nombre:</strong> <input type="text" id="studentName" class="input-field" placeholder="Escriba su nombre"></div>
+                <div><strong>Curso y División:</strong> <input type="text" id="studentCourse" class="input-field" placeholder="Eje: 3° 1°"></div>
+            </div>
+            <div class="student-data" style="text-align: right;">
+                <div><strong>Fecha:</strong> <input type="text" id="examDate" class="input-field" style="width: 100px; text-align: center;" placeholder="DD/MM/2026"></div>
+                <div><strong>Calificación:</strong> ________ / 100 pts</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- TABLA DE DISTRIBUCIÓN DE PUNTAJE -->
+    <table class="scores-table">
+        <thead>
+            <tr>
+                <th>Sección</th>
+                <th>I - Múltiple Opción</th>
+                <th>II - Verdadero/Falso</th>
+                <th>III - Unir con Flechas</th>
+                <th>IV - Caso Práctico</th>
+                <th>V - Prolijidad/Ortografía</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Máximo</strong></td>
+                <td>30 pts (5x6)</td>
+                <td>20 pts (5x4)</td>
+                <td>20 pts (5x4)</td>
+                <td>20 pts</td>
+                <td>10 pts</td>
+                <td><strong>100 pts</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Obtenido</strong></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- SECCIÓN I -->
+    <section>
+        <h2>SECCIÓN I: Opción Múltiple (5 preguntas x 6 pts c/u = 30 pts)</h2>
+        <p><em>Marque con una opción en cada ítem.</em></p>
+
+        <div class="question">
+            <p>1. ¿A qué se refiere el criterio de <u>escalabilidad</u> al seleccionar un software?</p>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A"> A) A que sea fácil de instalar en sistemas operativos antiguos.</label>
+                <label><input type="radio" name="q1" value="B"> B) A la capacidad del software para crecer y responder bien si aumentan los usuarios o los datos.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>2. Un taller mecánico necesita un sistema para cargar repuestos y consultar el stock desde el celular o cualquier PC sin instalar nada localmente. ¿Qué modalidad es la mejor opción?</p>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A"> A) Software web / SaaS (Software como Servicio).</label>
+                <label><input type="radio" name="q2" value="B"> B) Software de escritorio sin conexión a red.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>3. ¿Qué beneficio clave ofrece el <u>Software Libre / Open Source</u> frente al Software Propietario en el ámbito escolar?</p>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A"> A) Que nunca requiere mantenimiento ni actualizaciones de seguridad.</label>
+                <label><input type="radio" name="q3" value="B"> B) La libertad de instalarlo en todas las computadoras necesarias sin pagar costos de licencias.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>4. Una PYME quiere implementar un nuevo sistema, pero sus empleados no tienen experiencia técnica. ¿Qué criterio técnico cobra mayor relevancia?</p>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A"> A) Usabilidad / Interfaz intuitiva y curva de aprendizaje rápida.</label>
+                <label><input type="radio" name="q4" value="B"> B) Disponibilidad del código fuente para ser reprogramado.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>5. Si un usuario necesita organizar grandes volúmenes de registros numéricos y generar gráficos estadísticos para un informe, ¿qué categoría de software debe elegir?</p>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A"> A) Procesador de texto (Microsoft Word, Google Docs).</label>
+                <label><input type="radio" name="q5" value="B"> B) Planilla de cálculo (Microsoft Excel, LibreOffice Calc).</label>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN II -->
+    <section>
+        <h2>SECCIÓN II: Verdadero o Falso (5 ítems x 4 pts c/u = 20 pts)</h2>
+        <p><em>Seleccione V o F según corresponda.</em></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Afirmación</th>
+                    <th class="checkbox-cell">V</th>
+                    <th class="checkbox-cell">F</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1. El costo total de un software comercial solo incluye el pago único de la licencia de compra.</td>
+                    <td class="checkbox-cell"><input type="radio" name="vf1" value="V"></td>
+                    <td class="checkbox-cell"><input type="radio" name="vf1" value="F"></td>
+                </tr>
+                <tr>
+                    <td>2. La portabilidad indica si un software puede ejecutarse en diferentes plataformas o sistemas operativos.</td>
+                    <td class="checkbox-cell"><input type="radio" name="vf2" value="V"></td>
+                    <td class="checkbox-cell"><input type="radio" name="vf2" value="F"></td>
+                </tr>
+                <tr>
+                    <td>3. Un software discontinuado o sin soporte técnico sigue siendo seguro si la PC no tiene virus.</td>
+                    <td class="checkbox-cell"><input type="radio" name="vf3" value="V"></td>
+                    <td class="checkbox-cell"><input type="radio" name="vf3" value="F"></td>
+                </tr>
+                <tr>
+                    <td>4. Las aplicaciones Web (SaaS) dependen indispensablemente de una conexión a Internet estable para funcionar plenamente.</td>
+                    <td class="checkbox-cell"><input type="radio" name="vf4" value="V"></td>
+                    <td class="checkbox-cell"><input type="radio" name="vf4" value="F"></td>
+                </tr>
+                <tr>
+                    <td>5. Un software con "Adecuación Funcional" cumple exactamente con las tareas específicas que el usuario necesita resolver.</td>
+                    <td class="checkbox-cell"><input type="radio" name="vf5" value="V"></td>
+                    <td class="checkbox-cell"><input type="radio" name="vf5" value="F"></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- SECCIÓN III -->
+    <section>
+        <h2>SECCIÓN III: Unir con Flechas / Relacionar (5 pares x 4 pts c/u = 20 pts)</h2>
+        <p><em>Escriba la letra del software adecuado para cada problema.</em></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 45%;">Tipo de problema / Necesidad</th>
+                    <th style="width: 10%; text-align: center;">Resp.</th>
+                    <th style="width: 45%;">Software adecuado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1. Un estudiante necesita editar un video para un proyecto escolar sin pagar licencias.</td>
+                    <td style="text-align: center;"><input type="text" id="match1" style="width: 30px; text-align: center;" maxlength="1"></td>
+                    <td><strong>A.</strong> Editor de gráficos vectoriales (Inkscape, Illustrator).</td>
+                </tr>
+                <tr>
+                    <td>2. Diseñar un logotipo profesional escalable que no pierda calidad al ampliarlo.</td>
+                    <td style="text-align: center;"><input type="text" id="match2" style="width: 30px; text-align: center;" maxlength="1"></td>
+                    <td><strong>B.</strong> Navegador web moderno (Chrome, Firefox).</td>
+                </tr>
+                <tr>
+                    <td>3. Visualizar y navegar sitios web interactivos usando protocolos estándar.</td>
+                    <td style="text-align: center;"><input type="text" id="match3" style="width: 30px; text-align: center;" maxlength="1"></td>
+                    <td><strong>C.</strong> Editor de video Open Source (Kdenlive, Shotcut).</td>
+                </tr>
+                <tr>
+                    <td>4. Un negocio necesita emitir facturas electrónicas y controlar cobros de clientes.</td>
+                    <td style="text-align: center;"><input type="text" id="match4" style="width: 30px; text-align: center;" maxlength="1"></td>
+                    <td><strong>D.</strong> Gestor de bases de datos (MySQL, Access).</td>
+                </tr>
+                <tr>
+                    <td>5. Administrar grandes bases de datos relacionales con consultas estructuradas.</td>
+                    <td style="text-align: center;"><input type="text" id="match5" style="width: 30px; text-align: center;" maxlength="1"></td>
+                    <td><strong>E.</strong> Sistema de gestión comercial / Facturación.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- SECCIÓN IV -->
+    <section>
+        <h2>SECCIÓN IV: Caso Práctico (20 pts)</h2>
+        <div class="case-box">
+            <strong>Situación:</strong> Una radio FM comunitaria de un municipio pequeño quiere organizar su archivo de audios (programas grabados y música). Disponen de dos computadoras antiguas con sistema operativo Linux, <strong>no cuentan con conexión a internet en la sala de edición</strong> y el personal técnico está integrado por voluntarios con conocimientos informáticos básicos.
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <strong>A. (8 pts)</strong> Mencioná <strong>tres criterios de selección</strong> fundamentales para evaluar el software de edición de audio en este escenario y explicá brevemente por qué.
+            <textarea id="caseA" class="essay-space" rows="3"></textarea>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <strong>B. (7 pts)</strong> ¿Qué programa de edición de audio (ej: Audacity, Pro Tools, etc.) o tipo de licencia recomendarías? Justificá con 2 argumentos basados en las restricciones del caso.
+            <textarea id="caseB" class="essay-space" rows="3"></textarea>
+        </div>
+
+        <div>
+            <strong>C. (5 pts)</strong> ¿Qué inconveniente o desventaja podría presentarse al trabajar con equipos antiguos y software libre en este entorno?
+            <textarea id="caseC" class="essay-space" rows="3"></textarea>
+        </div>
+    </section>
+
+    <!-- SECCIÓN V -->
+    <section>
+        <h2>SECCIÓN V: Prolijidad y Ortografía (10 pts)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Indicadores</th>
+                    <th style="width: 100px;">Máx.</th>
+                    <th style="width: 100px;">Obtenido</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ortografía y acentuación</td>
+                    <td>Sin errores = 4 pts | 1-2 errores = 2 pts | +3 errores = 0 pts</td>
+                    <td style="text-align: center;">4</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Legibilidad de la escritura</td>
+                    <td>Letra clara = 3 pts | Parcialmente legible = 1 pt | Ilegible = 0 pts</td>
+                    <td style="text-align: center;">3</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Orden y prolijidad general</td>
+                    <td>Presentación limpia, organizada y sin tachaduras excesivas</td>
+                    <td style="text-align: center;">3</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <footer style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div style="border-top: 1px solid #333; width: 250px; text-align: center; padding-top: 5px;">
+            Firma y aclaración del alumno/a
+        </div>
+        <div style="text-align: right; font-style: italic; font-size: 0.9rem;">
+            Prof. Humberto Montaldi — TIC
+        </div>
+    </footer>
+
+    <!-- BOTÓN DE ENVÍO -->
+    <div class="action-container">
+        <button type="button" class="btn-submit" onclick="sendMail()">📧 Enviar Resultados por Correo</button>
+    </div>
+
+</div>
+
+<script>
+    function getRadioValue(name) {
+        const selected = document.querySelector(`input[name="${name}"]:checked`);
+        return selected ? selected.value : 'Sin responder';
+    }
+
+    function sendMail() {
+        const studentName = document.getElementById('studentName').value || 'Sin Nombre';
+        const studentCourse = document.getElementById('studentCourse').value || 'Sin Curso';
+        const examDate = document.getElementById('examDate').value || 'Sin Fecha';
+
+        // Recopilación de respuestas
+        const q1 = getRadioValue('q1');
+        const q2 = getRadioValue('q2');
+        const q3 = getRadioValue('q3');
+        const q4 = getRadioValue('q4');
+        const q5 = getRadioValue('q5');
+
+        const vf1 = getRadioValue('vf1');
+        const vf2 = getRadioValue('vf2');
+        const vf3 = getRadioValue('vf3');
+        const vf4 = getRadioValue('vf4');
+        const vf5 = getRadioValue('vf5');
+
+        const m1 = document.getElementById('match1').value || '-';
+        const m2 = document.getElementById('match2').value || '-';
+        const m3 = document.getElementById('match3').value || '-';
+        const m4 = document.getElementById('match4').value || '-';
+        const m5 = document.getElementById('match5').value || '-';
+
+        const caseA = document.getElementById('caseA').value || 'Sin respuesta';
+        const caseB = document.getElementById('caseB').value || 'Sin respuesta';
+        const caseC = document.getElementById('caseC').value || 'Sin respuesta';
+
+        const recipient = 'hmontaldi@mendoza.edu.ar';
+        const subject = `Evaluación Selección de Software - ${studentName} - ${studentCourse}`;
+
+        let body = `DATOS DEL ALUMNO:\n`;
+        body += `Nombre: ${studentName}\n`;
+        body += `Curso: ${s
