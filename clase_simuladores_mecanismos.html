@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exploración de Simuladores de Mecanismos y Software de Cálculo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg: #f7f5ef;
+    --panel: #ffffff;
+    --panel-2: #f1efe6;
+    --line: #ddd8c9;
+    --line-soft: #e9e5d8;
+    --teal: #1f7a72;
+    --amber: #c8791f;
+    --text: #24302f;
+    --muted: #6d7672;
+    --danger: #b5453a;
+    --radius: 2px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      linear-gradient(var(--line-soft) 1px, transparent 1px) 0 0/40px 40px,
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px) 0 0/40px 40px,
+      var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.55;
+  }
+
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:var(--teal);}
+
+  header.hero{
+    position:relative;
+    padding:70px 24px 50px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    font-size:.72rem;
+    color:var(--amber);
+    margin-bottom:18px;
+  }
+  h1.title{
+    font-size:clamp(1.7rem, 4vw, 2.7rem);
+    margin:0 0 14px;
+    font-weight:700;
+    letter-spacing:-.01em;
+    color:var(--text);
+  }
+  .subtitle{
+    color:var(--muted);
+    max-width:640px;
+    margin:0 auto;
+    font-size:1.02rem;
+  }
+
+  .gear-rig{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:38px auto 8px;
+    height:130px;
+  }
+  svg.gear{ overflow:visible; }
+  .g1{animation:spin 6s linear infinite;}
+  .g2{animation:spinRev 4s linear infinite;}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  @keyframes spinRev{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+
+  main{max-width:920px;margin:0 auto;padding:0 24px 100px;}
+  section{padding:52px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+
+  .tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.7rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--teal);
+    border:1px solid var(--line);
+    background:var(--panel);
+    padding:4px 10px;
+    border-radius:var(--radius);
+    margin-bottom:14px;
+  }
+
+  h2{font-size:1.42rem; margin:0 0 6px; font-weight:700; color:var(--text);}
+  h2 .dim{color:var(--muted); font-weight:400; font-family:'IBM Plex Mono',monospace; font-size:1rem;}
+  h3{font-size:1.05rem;margin:26px 0 10px;color:var(--text);}
+  p{color:#3b4644;}
+  .lede{color:var(--muted); max-width:680px; margin-bottom:8px;}
+
+  .dim-rule{
+    display:flex;align-items:center;gap:10px;
+    color:var(--muted); font-family:'IBM Plex Mono',monospace; font-size:.72rem;
+    margin:18px 0 26px;
+  }
+  .dim-rule::before, .dim-rule::after{content:"";flex:1;height:1px;background:var(--line);}
+
+  .grid{display:grid; gap:16px; margin-top:20px;}
+  .grid-2{grid-template-columns:1fr 1fr;}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  @media(max-width:720px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+    position:relative;
+    box-shadow:0 1px 2px rgba(36,48,47,0.04);
+  }
+  .card::before{
+    content:attr(data-mark);
+    position:absolute; top:-10px; left:16px;
+    background:var(--bg);
+    padding:0 6px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.68rem;
+    color:var(--amber);
+    letter-spacing:.1em;
+  }
+  .card h4{margin:6px 0 8px; font-size:1rem; color:var(--text);}
+  .card p{margin:0 0 8px; font-size:.93rem;}
+  .card ul{margin:8px 0 0; padding-left:18px; font-size:.9rem; color:#3b4644;}
+  .badge-row{display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;}
+  .badge{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.68rem;
+    color:var(--muted);
+    border:1px solid var(--line);
+    padding:2px 8px;
+    border-radius:12px;
+  }
+  .badge.free{color:var(--teal); border-color:#bcd8d4;}
+
+  table{width:100%; border-collapse:collapse; margin-top:18px; font-size:.88rem;}
+  th,td{border:1px solid var(--line); padding:10px 12px; text-align:left;}
+  th{background:var(--panel-2); font-family:'IBM Plex Mono',monospace; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--amber);}
+  td{color:#3b4644; background:var(--panel);}
+
+  .calc{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px;
+    margin-top:20px;
+  }
+  .calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:center;}
+  @media(max-width:720px){.calc-grid{grid-template-columns:1fr;}}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--muted); margin-bottom:6px; letter-spacing:.05em;}
+  .field input[type=range]{width:100%; accent-color:var(--teal);}
+  .field .val{color:var(--teal); font-family:'IBM Plex Mono',monospace;}
+  .calc-result{
+    font-family:'IBM Plex Mono',monospace;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    padding:14px 16px;
+    border-radius:var(--radius);
+    margin-top:10px;
+  }
+  .calc-result .big{font-size:1.4rem; color:var(--amber); font-weight:700;}
+  .stage{display:flex; justify-content:center; align-items:center; height:200px;}
+
+  .steps{list-style:none; margin:20px 0 0; padding:0; counter-reset:step;}
+  .steps li{
+    counter-increment:step;
+    display:flex; gap:14px;
+    padding:14px 0;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .steps li:last-child{border-bottom:none;}
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--amber);
+    font-size:.85rem;
+    flex-shrink:0;
+    width:28px;
+  }
+  .steps li p{margin:0;}
+  .steps li strong{color:var(--text);}
+
+  dl.glossary{display:grid; grid-template-columns:200px 1fr; gap:10px 18px; margin-top:16px;}
+  dl.glossary dt{font-family:'IBM Plex Mono',monospace; color:var(--teal); font-size:.88rem; align-self:start;}
+  dl.glossary dd{margin:0; color:#3b4644; font-size:.9rem;}
+  @media(max-width:640px){dl.glossary{grid-template-columns:1fr;} dl.glossary dd{margin-bottom:6px;}}
+
+  .quiz-item{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px; margin-bottom:14px;}
+  .quiz-item p.q{font-weight:600; margin:0 0 12px; color:var(--text);}
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:10px 14px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:.92rem;
+    transition:border-color .15s;
+  }
+  .opt:hover{border-color:var(--teal);}
+  .opt.correct{border-color:var(--teal); background:rgba(31,122,114,0.1); color:var(--teal);}
+  .opt.wrong{border-color:var(--danger); background:rgba(181,69,58,0.08); color:var(--danger);}
+  .feedback{margin-top:10px; font-size:.85rem; color:var(--muted); display:none;}
+  .feedback.show{display:block;}
+
+  footer{
+    text-align:center;
+    padding:30px 24px 50px;
+    color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.75rem;
+  }
+
+  .toc{display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:22px; font-family:'IBM Plex Mono',monospace; font-size:.78rem;}
+  .toc a{color:var(--muted); text-decoration:none; border-bottom:1px dotted var(--line);}
+  .toc a:hover{color:var(--teal);}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">Informática · Sector Mecánico · 3° Año</div>
+  <h1 class="title">Exploración de simuladores de mecanismos<br>y software de cálculo</h1>
+  <p class="subtitle">Poleas, engranajes y transmisiones vistos desde la informática: qué tipo de software existe para simularlos y calcularlos, y cómo se explora una herramienta nueva.</p>
+
+  <div class="gear-rig">
+    <svg class="gear g1" width="80" height="80" viewBox="0 0 100 100">
+      <g fill="none" stroke="#1f7a72" stroke-width="6"><circle cx="50" cy="50" r="30"/></g>
+      <g fill="#1f7a72">
+        <rect x="47" y="8" width="6" height="16"/><rect x="47" y="76" width="6" height="16"/>
+        <rect x="8" y="47" width="16" height="6"/><rect x="76" y="47" width="16" height="6"/>
+        <rect x="20" y="20" width="6" height="16" transform="rotate(45 23 28)"/>
+        <rect x="20" y="64" width="6" height="16" transform="rotate(-45 23 72)"/>
+        <rect x="66" y="20" width="6" height="16" transform="rotate(-45 69 28)"/>
+        <rect x="66" y="64" width="6" height="16" transform="rotate(45 69 72)"/>
+      </g>
+      <circle cx="50" cy="50" r="9" fill="#f7f5ef" stroke="#1f7a72" stroke-width="4"/>
+    </svg>
+    <svg class="gear g2" width="54" height="54" viewBox="0 0 100 100" style="margin-left:-12px;">
+      <g fill="none" stroke="#c8791f" stroke-width="7"><circle cx="50" cy="50" r="28"/></g>
+      <g fill="#c8791f">
+        <rect x="46" y="4" width="8" height="18"/><rect x="46" y="78" width="8" height="18"/>
+        <rect x="4" y="46" width="18" height="8"/><rect x="78" y="46" width="18" height="8"/>
+      </g>
+      <circle cx="50" cy="50" r="8" fill="#f7f5ef" stroke="#c8791f" stroke-width="4"/>
+    </svg>
+  </div>
+
+  <div class="toc">
+    <a href="#intro">01 Por qué explorar software</a>
+    <a href="#tipos">02 Tipos de software</a>
+    <a href="#software">03 Herramientas libres</a>
+    <a href="#explorador">04 Explorador interactivo</a>
+    <a href="#actividad">05 Actividad</a>
+    <a href="#glosario">06 Glosario</a>
+    <a href="#quiz">07 Autoevaluación</a>
+  </div>
+</header>
+
+<main>
+
+  <section id="intro">
+    <span class="tag">01 · Introducción</span>
+    <h2>El mecanismo como caso de uso del software</h2>
+    <p class="lede">No vamos a calcular ni diseñar mecanismos: vamos a explorar, desde la informática, qué tipo de programas existen para representar poleas, engranajes y transmisiones en una computadora, y cómo se usan.</p>
+    <div class="dim-rule">◇ ENFOQUE DE LA CLASE</div>
+    <div class="grid grid-3">
+      <div class="card" data-mark="01">
+        <h4>Software como herramienta</h4>
+        <p>Cada simulador es, ante todo, un programa: tiene una interfaz, archivos propios, menús y una lógica de uso que se puede aprender.</p>
+      </div>
+      <div class="card" data-mark="02">
+        <h4>Distintas categorías</h4>
+        <p>No todo el software que "simula mecanismos" hace lo mismo: hay programas de diseño, de animación y de cálculo, cada uno con un objetivo distinto.</p>
+      </div>
+      <div class="card" data-mark="03">
+        <h4>Software libre</h4>
+        <p>Vamos a trabajar con programas gratuitos y de código abierto, disponibles para instalar en cualquier computadora del laboratorio.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tipos">
+    <span class="tag">02 · Categorías de software</span>
+    <h2>¿Qué tipos de programas existen?</h2>
+    <p class="lede">Antes de abrir cualquier programa, conviene entender en qué categoría entra y para qué sirve cada una.</p>
+    <div class="grid grid-2">
+      <div class="card" data-mark="TIPO A">
+        <h4>Software de diseño (CAD)</h4>
+        <p>Permite dibujar y armar piezas en 3D dentro de la computadora: por ejemplo, modelar una polea o un engranaje y unirlos en un conjunto.</p>
+      </div>
+      <div class="card" data-mark="TIPO B">
+        <h4>Software de cálculo</h4>
+        <p>Toma un modelo ya hecho y calcula automáticamente valores (esfuerzos, movimientos, relaciones) que sería muy lento calcular a mano.</p>
+      </div>
+    </div>
+    <p>En esta clase vamos a explorar un ejemplo de cada categoría: uno para diseñar y armar conjuntos, y otro para calcular.</p>
+  </section>
+
+  <section id="software">
+    <span class="tag">03 · Herramientas</span>
+    <h2>Software libre para instalar y explorar</h2>
+    <p class="lede">Dos programas gratuitos, disponibles para Windows y Linux, ideales para empezar a explorar sin costo.</p>
+
+    <div class="grid grid-2">
+      <div class="card" data-mark="DISEÑO">
+        <h4>FreeCAD</h4>
+        <p>Programa libre de diseño paramétrico en 3D. Permite abrir o crear piezas y armarlas en un conjunto que se puede mover en pantalla.</p>
+        <ul>
+          <li>Interfaz organizada en "bancos de trabajo", cada uno con sus propias herramientas.</li>
+          <li>Los archivos se guardan con su propia extensión (.FCStd).</li>
+          <li>Tiene una gran comunidad de usuarios y documentación en español.</li>
+        </ul>
+        <div class="badge-row"><span class="badge free">Gratuito</span><span class="badge">Código abierto</span><span class="badge">Windows / Linux</span></div>
+      </div>
+      <div class="card" data-mark="CÁLCULO">
+        <h4>Mecway</h4>
+        <p>Programa de cálculo por elementos finitos, con una versión gratuita para modelos simples. Recibe una pieza y devuelve resultados numéricos y gráficos.</p>
+        <ul>
+          <li>Se puede importar un modelo hecho en otro programa (como FreeCAD).</li>
+          <li>Muestra los resultados con colores sobre la pieza, fáciles de interpretar.</li>
+          <li>La versión gratuita alcanza para explorar el funcionamiento del programa.</li>
+        </ul>
+        <div class="badge-row"><span class="badge free">Versión gratuita</span><span class="badge">Windows</span></div>
+      </div>
+    </div>
+
+    <h3>Comparación rápida</h3>
+    <table>
+      <thead><tr><th>Programa</th><th>Categoría</th><th>Qué se hace con él</th></tr></thead>
+      <tbody>
+        <tr><td>FreeCAD</td><td>Diseño / Ensamble</td><td>Crear y armar piezas en 3D</td></tr>
+        <tr><td>Mecway</td><td>Cálculo</td><td>Calcular resultados numéricos sobre una pieza</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="explorador">
+    <span class="tag">04 · Práctica interactiva</span>
+    <h2>Cómo cambia un modelo digital al ajustar sus parámetros</h2>
+    <p class="lede">Esta es la idea central de un programa de diseño paramétrico: un modelo se define con valores (parámetros) que se pueden modificar, y el dibujo se actualiza solo. Probalo moviendo los controles.</p>
+
+    <div class="calc">
+      <div class="calc-grid">
+        <div>
+          <div class="field">
+            <label>Parámetro A — dientes de la pieza 1: <span class="val" id="z1val">20</span></label>
+            <input type="range" id="z1" min="8" max="60" value="20">
+          </div>
+          <div class="field">
+            <label>Parámetro B — dientes de la pieza 2: <span class="val" id="z2val">40</span></label>
+            <input type="range" id="z2" min="8" max="60" value="40">
+          </div>
+          <div class="calc-result">
+            El programa recalcula el dibujo automáticamente al cambiar cada parámetro.<br>
+            Tamaño relativo de las piezas: <span class="big" id="ratioOut">1 : 2.0</span>
+          </div>
+        </div>
+        <div class="stage">
+          <svg width="220" height="180" viewBox="0 0 220 180"></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="actividad">
+    <span class="tag">05 · Actividad de laboratorio</span>
+    <h2>Guía de exploración guiada</h2>
+    <p class="lede">Trabajo en parejas, en el laboratorio de informática. Duración estimada: un módulo de 80 minutos.</p>
+    <ol class="steps">
+      <li><p><strong>Instalar o abrir FreeCAD</strong> en la netbook y recorrer su interfaz: identificar la barra de bancos de trabajo, el árbol de modelo y el área de dibujo.</p></li>
+      <li><p><strong>Abrir un ejemplo</strong> de conjunto con engranajes o poleas (de la galería de ejemplos del programa o provisto por el docente) y observar cómo está organizado en piezas.</p></li>
+      <li><p><strong>Identificar tres funciones</strong> del programa que sirvan para armar o mover ese conjunto (por ejemplo: restricciones, medidas, rotación de vista).</p></li>
+      <li><p><strong>Abrir Mecway</strong> y explorar su interfaz: dónde se importa un modelo, dónde se definen las cargas y dónde se ven los resultados.</p></li>
+      <li><p><strong>Completar una ficha comparativa</strong> (provista por el docente) indicando, para cada programa: para qué sirve, qué tipo de archivo genera y una captura de pantalla de su interfaz.</p></li>
+      <li><p><strong>Puesta en común</strong>: cada pareja muestra su ficha y comenta una función del software que le resultó útil o difícil de encontrar.</p></li>
+    </ol>
+  </section>
+
+  <section id="glosario">
+    <span class="tag">06 · Glosario</span>
+    <h2>Términos clave</h2>
+    <dl class="glossary">
+      <dt>Software libre</dt><dd>Programa cuyo código fuente puede ser visto, modificado y redistribuido libremente por cualquier usuario.</dd>
+      <dt>Software paramétrico</dt><dd>Programa en el que el modelo se define con valores (parámetros) que, al cambiarlos, actualizan el dibujo automáticamente.</dd>
+      <dt>Banco de trabajo</dt><dd>En FreeCAD, conjunto de herramientas agrupadas según una tarea específica (por ejemplo, dibujar o ensamblar).</dd>
+      <dt>Elementos finitos (FEA)</dt><dd>Método de cálculo que usa una computadora para dividir una pieza en partes pequeñas y obtener resultados numéricos.</dd>
+      <dt>Formato de archivo</dt><dd>Manera en que un programa guarda su información; cada software suele tener su propia extensión de archivo.</dd>
+      <dt>Interfaz</dt><dd>Conjunto de menús, botones y paneles que permiten a una persona interactuar con un programa.</dd>
+    </dl>
+  </section>
+
+  <section id="quiz">
+    <span class="tag">07 · Autoevaluación</span>
+    <h2>Comprobá lo aprendido</h2>
+
+    <div class="quiz-item">
+      <p class="q">1. ¿Qué caracteriza a un software de diseño paramétrico como FreeCAD?</p>
+      <div class="opts" data-answer="1">
+        <button class="opt" data-idx="0">Solo permite ver videos de mecanismos ya armados</button>
+        <button class="opt" data-idx="1">El modelo se actualiza automáticamente al cambiar sus parámetros</button>
+        <button class="opt" data-idx="2">Requiere pagar una licencia para usarse</button>
+      </div>
+      <p class="feedback">Lo distintivo del diseño paramétrico es que el dibujo se recalcula solo cuando se modifica un valor del modelo.</p>
+    </div>
+
+    <div class="quiz-item">
+      <p class="q">2. ¿Qué hace principalmente un software de cálculo como Mecway?</p>
+      <div class="opts" data-answer="2">
+        <button class="opt" data-idx="0">Dibuja piezas nuevas desde cero</button>
+        <button class="opt" data-idx="1">Reproduce videos de simulaciones</button>
+        <button class="opt" data-idx="2">Calcula resultados numéricos a partir de un modelo importado</button>
+      </div>
+      <p class="feedback">Mecway recibe un modelo, aplica condiciones y devuelve resultados numéricos y gráficos, no se usa para diseñar piezas desde cero.</p>
+    </div>
+
+    <div class="quiz-item">
+      <p class="q">3. ¿Qué es un "banco de trabajo" en FreeCAD?</p>
+      <div class="opts" data-answer="0">
+        <button class="opt" data-idx="0">Un conjunto de herramientas agrupadas según una tarea</button>
+        <button class="opt" data-idx="1">Un tipo de archivo del programa</button>
+        <button class="opt" data-idx="2">Una versión paga del software</button>
+      </div>
+      <p class="feedback">Cada banco de trabajo agrupa las herramientas necesarias para una tarea puntual, como dibujar o ensamblar piezas.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Prof. Humberto Montaldi · Informática · Sector Mecánico · Escuela Técnica N° 4-120 "Gral. José de San Martín"
+</footer>
+
+<script>
+  const z1 = document.getElementById('z1');
+  const z2 = document.getElementById('z2');
+  const z1val = document.getElementById('z1val');
+  const z2val = document.getElementById('z2val');
+  const ratioOut = document.getElementById('ratioOut');
+
+  function gearPath(teeth, rBase, cx, cy){
+    const toothH = rBase * 0.22;
+    const rOuter = rBase + toothH;
+    let d = "";
+    for(let i=0;i<teeth;i++){
+      const a0 = (i/teeth)*2*Math.PI;
+      const a1 = a0 + (Math.PI/teeth)*0.55;
+      const a2 = a0 + (Math.PI/teeth)*1.0;
+      const a3 = a0 + (Math.PI/teeth)*1.45;
+      const p = (ang,r)=> [cx+r*Math.cos(ang), cy+r*Math.sin(ang)];
+      const [x0,y0]=p(a0,rBase), [x1,y1]=p(a1,rOuter), [x2,y2]=p(a2,rOuter), [x3,y3]=p(a3,rBase);
+      d += (i===0? `M ${x0} ${y0} `: `L ${x0} ${y0} `) + `L ${x1} ${y1} L ${x2} ${y2} L ${x3} ${y3} `;
+    }
+    d += "Z";
+    return d;
+  }
+
+  function renderGears(){
+    const Z1 = parseInt(z1.value), Z2 = parseInt(z2.value);
+    const scale = 2.3;
+    const r1 = Math.max(14, Z1*scale/2);
+    const r2 = Math.max(14, Z2*scale/2);
+    const cx1 = 70, cy1 = 90;
+    const cx2 = cx1 + r1 + r2, cy2 = 90;
+
+    const svgHost = document.querySelector('.stage svg');
+    svgHost.setAttribute('viewBox', `0 0 ${cx2 + r2 + 20} 180`);
+    svgHost.innerHTML = `
+      <path d="${gearPath(Z1, r1, cx1, cy1)}" fill="#ffffff" stroke="#1f7a72" stroke-width="2"/>
+      <circle cx="${cx1}" cy="${cy1}" r="5" fill="#f7f5ef" stroke="#1f7a72" stroke-width="2"/>
+      <path d="${gearPath(Z2, r2, cx2, cy2)}" fill="#ffffff" stroke="#c8791f" stroke-width="2"/>
+      <circle cx="${cx2}" cy="${cy2}" r="5" fill="#f7f5ef" stroke="#c8791f" stroke-width="2"/>
+    `;
+
+    ratioOut.textContent = `1 : ${(Z2/Z1).toFixed(1)}`;
+  }
+
+  [z1,z2].forEach(el=>{
+    el.addEventListener('input', ()=>{
+      z1val.textContent = z1.value;
+      z2val.textContent = z2.value;
+      renderGears();
+    });
+  });
+  renderGears();
+
+  document.querySelectorAll('.opts').forEach(group=>{
+    const answer = parseInt(group.dataset.answer);
+    const feedback = group.parentElement.querySelector('.feedback');
+    group.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const idx = parseInt(btn.dataset.idx);
+        group.querySelectorAll('.opt').forEach(b=>{
+          b.classList.remove('correct','wrong');
+          b.disabled = true;
+        });
+        if(idx === answer){
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('wrong');
+          group.querySelector(`[data-idx="${answer}"]`).classList.add('correct');
+        }
+        feedback.classList.add('show');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
