@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego: Concientización sobre la Trata de Personas</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#004d40,#00695c);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.contenedor{
+    background:#ffffff;
+    color:#222;
+    width:90%;
+    max-width:700px;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,.4);
+}
+
+h1{
+    text-align:center;
+    color:#00695c;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border:none;
+    border-radius:8px;
+    background:#00897b;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#00695c;
+}
+
+#resultado{
+    font-size:18px;
+    margin-top:20px;
+    text-align:center;
+}
+
+#explicacion{
+    margin-top:15px;
+    font-style:italic;
+}
+
+#puntaje{
+    text-align:right;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<h1>🛑 Alto a la Trata de Personas</h1>
+
+<p id="puntaje">Puntaje: 0</p>
+
+<h2 id="pregunta"></h2>
+
+<div id="opciones"></div>
+
+<p id="explicacion"></p>
+
+<div id="resultado"></div>
+
+</div>
+
+<script>
+
+const preguntas=[
+
+{
+pregunta:"1. ¿Qué es la trata de personas?",
+opciones:[
+"Un delito que explota a personas mediante engaño, amenazas o violencia.",
+"Un trabajo temporal.",
+"Un viaje turístico."
+],
+correcta:0,
+explicacion:"La trata de personas es un delito que vulnera los derechos humanos."
+},
+
+{
+pregunta:"2. ¿Cuál puede ser una señal de explotación laboral?",
+opciones:[
+"No poder salir libremente del lugar de trabajo.",
+"Recibir vacaciones.",
+"Tener horario fijo."
+],
+correcta:0,
+explicacion:"La explotación laboral limita la libertad y vulnera derechos."
+},
+
+{
+pregunta:"3. ¿Qué debe hacer una persona si sospecha un caso de trata?",
+opciones:[
+"Ignorarlo.",
+"Denunciar a las autoridades competentes.",
+"Publicarlo como un rumor."
+],
+correcta:1,
+explicacion:"Denunciar puede ayudar a proteger a las víctimas."
+},
+
+{
+pregunta:"4. ¿Quiénes pueden ser víctimas de trata?",
+opciones:[
+"Solo adultos.",
+"Solo extranjeros.",
+"Cualquier persona."
+],
+correcta:2,
+explicacion:"La trata puede afectar a personas de cualquier edad o nacionalidad."
+},
+
+{
+pregunta:"5. ¿Cuál es la mejor forma de prevenir este delito?",
+opciones:[
+"Informarse y compartir información confiable.",
+"Confiar en cualquier oferta de trabajo.",
+"Aceptar trabajos sin verificar."
+],
+correcta:0,
+explicacion:"La información y la prevención ayudan a reducir los riesgos."
+}
+
+];
+
+let actual=0;
+let puntos=0;
+
+function mostrarPregunta(){
+
+document.getElementById("explicacion").innerHTML="";
+document.getElementById("resultado").innerHTML="";
+
+const p=preguntas[actual];
+
+document.getElementById("pregunta").innerHTML=p.pregunta;
+
+const opciones=document.getElementById("opciones");
+
+opciones.innerHTML="";
+
+p.opciones.forEach((opcion,i)=>{
+
+const boton=document.createElement("button");
+
+boton.innerHTML=opcion;
+
+boton.onclick=()=>responder(i);
+
+opciones.appendChild(boton);
+
+});
+
+}
+
+function responder(indice){
+
+const p=preguntas[actual];
+
+if(indice===p.correcta){
+puntos++;
+document.getElementById("resultado").innerHTML="✅ ¡Correcto!";
+}else{
+document.getElementById("resultado").innerHTML="❌ Incorrecto.";
+}
+
+document.getElementById("puntaje").innerHTML="Puntaje: "+puntos;
+
+document.getElementById("explicacion").innerHTML=p.explicacion;
+
+actual++;
+
+setTimeout(()=>{
+
+if(actual<preguntas.length){
+mostrarPregunta();
+}else{
+finalizar();
+}
+
+},1800);
+
+}
+
+function finalizar(){
+
+document.getElementById("pregunta").innerHTML="🎉 Juego Finalizado";
+
+document.getElementById("opciones").innerHTML="";
+
+document.getElementById("explicacion").innerHTML="";
+
+let mensaje="";
+
+if(puntos===5){
+mensaje="Excelente. Conoces muy bien cómo prevenir la trata de personas y la explotación laboral.";
+}else if(puntos>=3){
+mensaje="Muy bien. Sigue informándote y compartiendo información confiable.";
+}else{
+mensaje="Es importante aprender más sobre este tema para prevenir situaciones de riesgo.";
+}
+
+document.getElementById("resultado").innerHTML=
+"<h2>Obtuviste "+puntos+" de "+preguntas.length+" puntos.</h2><br>"+mensaje+
+"<br><br><strong>Recuerda:</strong> La trata de personas es un delito y puede prevenirse mediante la información, la educación y la denuncia responsable.";
+
+}
+
+mostrarPregunta();
+
+</script>
+
+</body>
+</html>
