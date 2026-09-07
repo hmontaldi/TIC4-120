@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuadernillo del Alumno — Diagnóstico de Fallas Mecánicas Asistido por IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EFF3F5;
+    --paper:#FBFCFC;
+    --ink:#1D2A2E;
+    --ink-soft:#4B5A5F;
+    --steel:#2E4A5E;
+    --steel-deep:#1F3341;
+    --rust:#B4632E;
+    --line:#C7D0D3;
+    --sage:#5C7A5E;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif; color:var(--steel-deep); margin:0 0 .3em 0; letter-spacing:-.01em;}
+  .eyebrow{font-family:'Space Grotesk',sans-serif; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--rust); font-weight:600; display:block;}
+
+  .masthead{
+    background:var(--steel-deep); color:#F1F5F6; padding:1.1rem 1.5rem;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.4rem;
+    border-bottom:3px solid var(--rust);
+  }
+  .masthead .school{font-family:'Space Grotesk',sans-serif; font-size:.85rem;}
+  .masthead .meta{font-size:.75rem; color:#B7C6CB; text-align:right;}
+
+  .toolbar{
+    position:sticky; top:0; z-index:10;
+    background:rgba(239,243,245,.94); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    display:flex; justify-content:flex-end; gap:.6rem;
+    padding:.5rem 1.5rem;
+  }
+  .toolbar button{
+    font-family:'Space Grotesk',sans-serif; font-size:.75rem; letter-spacing:.03em; text-transform:uppercase;
+    border:1px solid var(--steel); color:var(--steel); background:var(--paper);
+    border-radius:20px; padding:.4rem 1rem; cursor:pointer; font-weight:600;
+  }
+  .toolbar button:hover{background:var(--steel); color:#fff;}
+
+  main{max-width:900px; margin:0 auto; padding:2.4rem 1.5rem 4rem;}
+
+  .hero h1{font-size:clamp(1.6rem,3.6vw,2.2rem); line-height:1.1; max-width:22ch;}
+  .lede{max-width:66ch; color:var(--ink-soft); margin-top:.6rem; font-size:.98rem;}
+
+  .fields{margin-top:1.8rem;}
+  .field{margin-bottom:1rem;}
+  .field label{
+    display:block; font-weight:600; color:var(--steel); font-size:.85rem; margin-bottom:.25rem;
+  }
+  .field input[type=text]{
+    width:100%; border:none; border-bottom:1px solid var(--line); background:transparent;
+    font-family:'IBM Plex Sans',sans-serif; font-size:.95rem; color:var(--ink); padding:.3rem .1rem;
+  }
+  .field input[type=text]:focus{outline:none; border-color:var(--rust);}
+
+  hr.rule{border:none; border-top:1px solid var(--line); margin:2.4rem 0;}
+
+  .ficha{
+    background:var(--paper); border:1px solid var(--line); border-left:4px solid var(--steel);
+    border-radius:3px; padding:1.1rem 1.2rem 1.3rem; margin-top:1.6rem;
+  }
+  .ficha-num{font-family:'Space Grotesk',sans-serif; font-size:.78rem; font-weight:700; color:var(--rust); letter-spacing:.06em;}
+  .ficha h3{font-size:1.05rem; margin:.15rem 0 .2rem;}
+  .ficha .obj{font-size:.85rem; color:var(--ink-soft); font-style:italic; margin-bottom:.9rem;}
+
+  h4.sub{
+    font-family:'Space Grotesk',sans-serif; font-size:.78rem; text-transform:uppercase;
+    letter-spacing:.06em; color:var(--steel); margin:1rem 0 .4rem;
+  }
+  h4.sub:first-of-type{margin-top:0;}
+
+  textarea{
+    width:100%; min-height:5.2rem; resize:vertical;
+    border:1px solid var(--line); border-radius:3px; background:#fff;
+    font-family:'IBM Plex Sans',sans-serif; font-size:.92rem; color:var(--ink);
+    padding:.6rem .7rem;
+  }
+  textarea:focus{outline:none; border-color:var(--rust);}
+
+  .prompt-hint{
+    background:#EEF1EB; border:1px dashed var(--sage); border-radius:3px;
+    padding:.6rem .8rem; font-family:'IBM Plex Mono',monospace; font-size:.78rem; color:#2E3B2F;
+    margin-bottom:.6rem;
+  }
+
+  table.fill{width:100%; border-collapse:collapse; margin-top:.4rem; font-size:.85rem;}
+  table.fill th, table.fill td{border:1px solid var(--line); padding:.4rem .5rem; vertical-align:top;}
+  table.fill thead th{
+    font-family:'Space Grotesk',sans-serif; font-size:.68rem; text-transform:uppercase; letter-spacing:.04em;
+    color:var(--steel-deep); background:#F4F6F6; text-align:left;
+  }
+  table.fill td input[type=text]{
+    width:100%; border:none; background:transparent; font-size:.85rem; color:var(--ink); padding:.15rem;
+  }
+  table.fill td input[type=text]:focus{outline:none;}
+
+  ul.check{list-style:none; margin:0; padding:0;}
+  ul.check li{display:flex; align-items:flex-start; gap:.55rem; margin-bottom:.55rem; font-size:.92rem;}
+  ul.check input[type=checkbox]{margin-top:.2rem; width:1rem; height:1rem; accent-color:var(--steel);}
+
+  footer{text-align:center; padding:2rem 1.5rem 3rem; color:var(--ink-soft); font-size:.78rem;}
+
+  @media print{
+    .toolbar{display:none;}
+    .masthead{background:#fff !important; color:#000 !important; border-bottom:2px solid #000;}
+    .masthead .meta{color:#333;}
+    body{background:#fff;}
+    .ficha{break-inside:avoid;}
+    textarea{border:1px solid #999;}
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="school">Escuela Técnica N° 4-120 «Gral. José de San Martín»</div>
+  <div class="meta">TIC y Sector Mecánico · 3° Año · Prof. Humberto Montaldi · 2026</div>
+</div>
+
+<div class="toolbar">
+  <button onclick="window.print()">Imprimir / Guardar PDF</button>
+</div>
+
+<main>
+  <div class="hero">
+    <span class="eyebrow">Proyecto integrador — cuadernillo del alumno</span>
+    <h1>Diagnóstico de fallas mecánicas asistido por IA</h1>
+    <p class="lede">Este cuadernillo te acompaña durante las 5 clases del proyecto. Completalo en cada encuentro: es tu registro de trabajo y forma parte de la evaluación.</p>
+  </div>
+
+  <div class="fields">
+    <div class="field"><label>Grupo N°</label><input type="text"></div>
+    <div class="field"><label>Integrantes</label><input type="text"></div>
+    <div class="field"><label>Equipo / mecanismo elegido</label><input type="text"></div>
+    <div class="field"><label>Falla observada</label><input type="text"></div>
+  </div>
+
+  <hr class="rule">
+
+  <div class="ficha">
+    <div class="ficha-num">CLASE 01</div>
+    <h3>Elección del caso y primer contacto con la IA</h3>
+    <div class="obj">Objetivo: definir el mecanismo con falla y aprender buenas prácticas de prompting.</div>
+
+    <h4 class="sub">Parte de síntomas (antes de usar la IA)</h4>
+    <p style="font-size:.88rem; color:var(--ink-soft); margin:.2rem 0 .5rem;">Describí qué se observa, cuándo aparece la falla y qué se probó hasta ahora.</p>
+    <textarea></textarea>
+
+    <h4 class="sub">Prompt inicial que van a usar</h4>
+    <div class="prompt-hint">Podés partir de: «Actuá como técnico mecánico. Te voy a describir los síntomas de una falla en [equipo]. Ayudame a organizar un árbol de diagnóstico posible, del síntoma a las causas más probables, sin inventar datos que no te di.»</div>
+    <textarea style="min-height:3.4rem;"></textarea>
+  </div>
+
+  <div class="ficha">
+    <div class="ficha-num">CLASE 02</div>
+    <h3>Construcción del árbol de diagnóstico con IA</h3>
+    <div class="obj">Objetivo: dialogar con el chatbot y registrar el proceso de forma crítica.</div>
+    <p style="font-size:.88rem; color:var(--ink-soft); margin:.2rem 0 .5rem;">Completá la tabla con lo que propone la IA y marcá qué verificaron ustedes.</p>
+    <table class="fill">
+      <thead><tr><th>Síntoma</th><th>Causa propuesta por la IA</th><th>Cómo se verifica en el taller</th><th>¿Confirmado?</th></tr></thead>
+      <tbody id="tabla-clase2"></tbody>
+    </table>
+  </div>
+
+  <div class="ficha">
+    <div class="ficha-num">CLASE 03</div>
+    <h3>Ilustración con IA generativa de imágenes</h3>
+    <div class="obj">Objetivo: traducir cada rama del árbol en una imagen técnica clara.</div>
+    <table class="fill">
+      <thead><tr><th>Rama ilustrada</th><th>Descripción de la imagen generada</th><th>¿Es técnicamente correcta?</th></tr></thead>
+      <tbody id="tabla-clase3"></tbody>
+    </table>
+  </div>
+
+  <div class="ficha">
+    <div class="ficha-num">CLASE 04</div>
+    <h3>Armado del informe técnico final</h3>
+    <div class="obj">Objetivo: integrar texto, árbol de diagnóstico e imágenes en un único documento.</div>
+    <p style="font-size:.88rem; color:var(--ink-soft); margin:.2rem 0 .6rem;">Checklist del informe final — marcá cada punto a medida que lo completan:</p>
+    <ul class="check">
+      <li><input type="checkbox"> Presentación del caso: equipo, contexto, síntoma inicial</li>
+      <li><input type="checkbox"> Árbol de diagnóstico completo, con imágenes junto a cada rama</li>
+      <li><input type="checkbox"> Conclusión: causa más probable y recomendación</li>
+      <li><input type="checkbox"> Reflexión: qué acertó la IA y qué hubo que corregir</li>
+      <li><input type="checkbox"> Anexo con los prompts principales utilizados</li>
+    </ul>
+  </div>
+
+  <div class="ficha">
+    <div class="ficha-num">CLASE 05</div>
+    <h3>Presentación y evaluación entre pares</h3>
+    <div class="obj">Objetivo: comunicar el proceso y discutir los límites de la IA como herramienta técnica.</div>
+    <p style="font-size:.88rem; color:var(--ink-soft); margin:.2rem 0 .5rem;">Completá esta grilla mientras escuchás a otros grupos (una fila por grupo).</p>
+    <table class="fill">
+      <thead><tr><th>Grupo evaluado</th><th>Claridad</th><th>Uso crítico de la IA</th><th>Comentario</th></tr></thead>
+      <tbody id="tabla-clase5"></tbody>
+    </table>
+
+    <h4 class="sub">Autoevaluación grupal</h4>
+    <p style="font-size:.88rem; color:var(--ink-soft); margin:.2rem 0 .5rem;">¿Qué aportó la IA a su trabajo? ¿En qué momento fue necesario el criterio técnico propio del grupo, por encima de lo que sugería la IA?</p>
+    <textarea style="min-height:5.5rem;"></textarea>
+  </div>
+
+</main>
+
+<footer>Escuela Técnica N° 4-120 «Gral. José de San Martín» · Proyecto Integrador TIC × Sector Mecánico</footer>
+
+<script>
+function fillRows(tbodyId, cols, rows){
+  const tbody = document.getElementById(tbodyId);
+  let html = '';
+  for(let r=0; r<rows; r++){
+    html += '<tr>';
+    for(let c=0; c<cols; c++){
+      html += '<td><input type="text"></td>';
+    }
+    html += '</tr>';
+  }
+  tbody.innerHTML = html;
+}
+fillRows('tabla-clase2', 4, 5);
+fillRows('tabla-clase3', 3, 4);
+fillRows('tabla-clase5', 4, 4);
+</script>
+
+</body>
+</html>
